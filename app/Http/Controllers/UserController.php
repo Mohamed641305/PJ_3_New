@@ -24,7 +24,7 @@ class UserController extends Controller {
     function delete( $id ) {
         $user = User::findOrFail( $id );
         $user->delete();
-        return redirect()->route( 'user' )->with('success', 'User deleted successfully.');
+        return redirect()->route( 'user' )->with( 'success', 'User deleted successfully.' );
     }
 
     function create() {
@@ -37,29 +37,34 @@ class UserController extends Controller {
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
-            'phone_number' => "required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10",
-            'address' => 'required|max:255'
+            'phone_number' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:11',
+            'address' => 'required|max:255',
         ] );
 
         if ( $request->hasFile( 'profile_image' ) ) {
             $img = $request->file( 'profile_image' );
-            $imgName = random_int( 1, 10000 ) . '_' . time() . '.' . $img->extension();
+            $imgName = rand( 1000, 9999 ) . '_' . time() . '.' . $img->extension();
             $img->move( public_path( 'images/users' ), $imgName );
         } else {
             $imgName = 'default.jpg';
-            // صورة افتراضية داخل public/images/users
         }
+
         User::create( [
-            'profile_image' => $imgName, // استخدم نفس اسم العمود في الجدول
+            'profile_image' => $imgName,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make( $request->password ),
             'phone_number' => $request->phone_number,
-            'address' => $request->address
+            'address' => $request->address,
 
+            // لو موجودين هياخدهم، ولو مش موجودين هيستخدم القيم الافتراضية
+            'role' => $request->input( 'role', 'user' ),
+            'status' => $request->input( 'status', 1 ),
         ] );
 
-        return redirect()->route( 'user' )->with('success', 'User added successfully.');
+        return redirect()
+        ->route( 'user' )
+        ->with( 'success', 'User added successfully.' );
     }
 
     public function edit( $id ) {
@@ -73,33 +78,46 @@ class UserController extends Controller {
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $id,
             'password' => 'nullable|min:6',
-            'phone_number' => "required|regex:/^([0-9\s\-\+\(\)]*)$/|min:11",
-            'address' => 'required|max:255'
+            'phone_number' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:11',
+            'address' => 'required|max:255',
+            'role' => 'required|in:user,admin',
+            'status' => 'required|in:0,1',
         ] );
 
         $user = User::findOrFail( $id );
 
         if ( $request->hasFile( 'profile_image' ) ) {
-            if ( File::exists( public_path( '/images/users/' . $user->profile_image ) ) ) {
-                File::delete( public_path( '/images/users/' . $user->profile_image ) );
+
+            if (
+                $user->profile_image != 'default.jpg' &&
+                File::exists( public_path( 'images/users/' . $user->profile_image ) )
+            ) {
+                File::delete( public_path( 'images/users/' . $user->profile_image ) );
             }
+
             $img = $request->file( 'profile_image' );
-            $imgName = random_int( 1, 10000 ) . '_' . time() . '.' . $img->extension();
+            $imgName = rand( 1000, 9999 ) . '_' . time() . '.' . $img->extension();
             $img->move( public_path( 'images/users' ), $imgName );
+
         } else {
             $imgName = $user->profile_image;
-            // الاحتفاظ بالصورة القديمة إذا لم يتم تحميل صورة جديدة
         }
 
         $user->update( [
             'profile_image' => $imgName,
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password ? Hash::make( $request->password ) : $user->password,
+            'password' => $request->filled( 'password' )
+            ? Hash::make( $request->password )
+            : $user->password,
             'phone_number' => $request->phone_number,
-            'address' => $request->address
+            'address' => $request->address,
+            'role' => $request->role,
+            'status' => $request->input( 'status', $user->status ),
         ] );
 
-        return redirect()->route( 'user' )->with('success', 'User added successfully.');
+        return redirect()
+        ->route( 'user' )
+        ->with( 'success', 'User updated successfully.' );
     }
 }

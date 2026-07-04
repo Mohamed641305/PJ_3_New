@@ -12,10 +12,10 @@ class AdminController extends Controller
         $usercount = User::count();
 
         // المستخدمون النشطون
-        $activeUsers = User::where('status', '0')->count();
+        $activeUsers = User::where('status', '1')->count();
 
         // المستخدمون المحظورون
-        $blockedUsers = User::where('status', '1')->count();
+        $blockedUsers = User::where('status', '0')->count();
 
         // عدد الأدمن
         $adminsCount = User::where('role', 'admin')->count();

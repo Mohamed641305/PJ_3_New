@@ -10,9 +10,15 @@
     <div class="mb-5 welcome-box">
         <div>
             <h2 class="mb-1 fw-bold">Welcome Back 👋</h2>
-            <p class="mb-0">
+
+            <p class="mb-3">
                 Manage your system efficiently from your dashboard.
             </p>
+
+            <a href="{{ url('/home') }}" class="btn btn-light btn-home">
+                <i class="fas fa-house me-2"></i>
+                Back to Home
+            </a>
         </div>
 
         <div class="welcome-icon">
@@ -132,6 +138,18 @@
     align-items:center;
     justify-content:center;
     font-size:35px;
+}
+
+.btn-home{
+    border-radius:12px;
+    padding:10px 22px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.btn-home:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
 }
 
 .dashboard-card{

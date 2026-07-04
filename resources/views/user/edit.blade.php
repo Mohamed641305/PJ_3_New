@@ -540,204 +540,218 @@
 
 @section('content')
 
-<div class="container-fluid">
+    <div class="container-fluid">
 
-    <!-- Header -->
-    <div class="mb-4 page-header">
-        <div>
-            <h2 class="mb-1 fw-bold">Edit User</h2>
-            <p class="mb-0 text-muted">
-                Update user information and account details.
-            </p>
+        <!-- Header -->
+        <div class="mb-4 page-header">
+            <div>
+                <h2 class="mb-1 fw-bold">Edit User</h2>
+                <p class="mb-0 text-muted">
+                    Update user information and account details.
+                </p>
+            </div>
+
+            <a href="{{ route('user.show', $result->id) }}" class="btn btn-outline-primary rounded-pill">
+                <i class="fa fa-arrow-left me-1"></i>
+                Back
+            </a>
         </div>
 
-        <a href="{{ route('user.show', $result->id) }}"
-            class="btn btn-outline-primary rounded-pill">
-            <i class="fa fa-arrow-left me-1"></i>
-            Back
-        </a>
-    </div>
+        <div class="row justify-content-center">
 
-    <div class="row justify-content-center">
+            <div class="col-lg-8">
 
-        <div class="col-lg-8">
+                <div class="card form-card">
 
-            <div class="card form-card">
+                    <div class="p-5 card-body">
 
-                <div class="p-5 card-body">
+                        @if (session('success'))
+                            <div class="alert alert-success rounded-4">
+                                {{ session('success') }}
+                            </div>
+                        @endif
 
-                    @if (session('success'))
-                        <div class="alert alert-success rounded-4">
-                            {{ session('success') }}
-                        </div>
-                    @endif
+                        <form action="{{ route('user.update', $result->id) }}" method="POST" enctype="multipart/form-data">
 
-                    <form action="{{ route('user.update', $result->id) }}"
-                          method="POST"
-                          enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
 
-                        @csrf
-                        @method('PUT')
+                            <!-- Current Image -->
+                            <div class="mb-4 text-center">
 
-                        <!-- Current Image -->
-                        <div class="mb-4 text-center">
+                                @if ($result->profile_image)
+                                    <img src="{{ asset('images/users/' . $result->profile_image) }}"
+                                        class="mb-3 profile-preview">
+                                @else
+                                    <img src="{{ asset('images/users/default.jpg') }}" class="mb-3 profile-preview">
+                                @endif
 
-                            @if ($result->profile_image)
-                                <img src="{{ asset('images/users/' . $result->profile_image) }}"
-                                    class="mb-3 profile-preview">
-                            @else
-                                <img src="{{ asset('images/users/default.jpg') }}"
-                                    class="mb-3 profile-preview">
-                            @endif
+                                <div>
+                                    <label class="form-label fw-semibold">
+                                        Change Profile Image
+                                    </label>
 
-                            <div>
+                                    <input type="file" name="profile_image" class="form-control">
+
+                                    @error('profile_image')
+                                        <div class="mt-2 alert alert-danger">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                            </div>
+
+                            <!-- Name -->
+                            <div class="mb-4">
+
                                 <label class="form-label fw-semibold">
-                                    Change Profile Image
+                                    Full Name
                                 </label>
 
-                                <input type="file"
-                                    name="profile_image"
-                                    class="form-control">
+                                <input type="text" name="name" class="form-control"
+                                    value="{{ old('name', $result->name) }}">
 
-                                @error('profile_image')
-                                    <div class="mt-2 alert alert-danger">
+                                @error('name')
+                                    <div class="mt-2 text-danger">
                                         {{ $message }}
                                     </div>
                                 @enderror
+
                             </div>
 
-                        </div>
+                            <!-- Email -->
+                            <div class="mb-4">
 
-                        <!-- Name -->
-                        <div class="mb-4">
+                                <label class="form-label fw-semibold">
+                                    Email Address
+                                </label>
 
-                            <label class="form-label fw-semibold">
-                                Full Name
-                            </label>
+                                <input type="email" name="email" class="form-control"
+                                    value="{{ old('email', $result->email) }}">
 
-                            <input type="text"
-                                name="name"
-                                class="form-control"
-                                value="{{ old('name', $result->name) }}">
+                                @error('email')
+                                    <div class="mt-2 text-danger">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
 
-                            @error('name')
-                                <div class="mt-2 text-danger">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            </div>
 
-                        </div>
+                            <!-- Phone -->
+                            <div class="mb-4">
 
-                        <!-- Email -->
-                        <div class="mb-4">
+                                <label class="form-label fw-semibold">
+                                    Phone Number
+                                </label>
 
-                            <label class="form-label fw-semibold">
-                                Email Address
-                            </label>
+                                <input type="text" name="phone_number" class="form-control"
+                                    value="{{ old('phone_number', $result->phone_number) }}">
 
-                            <input type="email"
-                                name="email"
-                                class="form-control"
-                                value="{{ old('email', $result->email) }}">
+                                @error('phone_number')
+                                    <div class="mt-2 text-danger">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
 
-                            @error('email')
-                                <div class="mt-2 text-danger">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            </div>
 
-                        </div>
+                            <!-- Address -->
+                            <div class="mb-4">
 
-                        <!-- Phone -->
-                        <div class="mb-4">
+                                <label class="form-label fw-semibold">
+                                    Address
+                                </label>
 
-                            <label class="form-label fw-semibold">
-                                Phone Number
-                            </label>
+                                <input type="text" name="address" class="form-control"
+                                    value="{{ old('address', $result->address) }}">
 
-                            <input type="text"
-                                name="phone_number"
-                                class="form-control"
-                                value="{{ old('phone_number', $result->phone_number) }}">
+                                @error('address')
+                                    <div class="mt-2 text-danger">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
 
-                            @error('phone_number')
-                                <div class="mt-2 text-danger">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            </div>
 
-                        </div>
+                            <!-- Role -->
+                            <div class="mb-4">
 
-                        <!-- Address -->
-                        <div class="mb-4">
+                                <label class="form-label fw-semibold">
+                                    User Role
+                                </label>
 
-                            <label class="form-label fw-semibold">
-                                Address
-                            </label>
+                                <select name="role" class="form-select">
 
-                            <input type="text"
-                                name="address"
-                                class="form-control"
-                                value="{{ old('address', $result->address) }}">
+                                    <option value="user" {{ old('role', $result->role) == 'user' ? 'selected' : '' }}>
+                                        User
+                                    </option>
 
-                            @error('address')
-                                <div class="mt-2 text-danger">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                                    <option value="admin" {{ old('role', $result->role) == 'admin' ? 'selected' : '' }}>
+                                        Admin
+                                    </option>
 
-                        </div>
+                                </select>
 
-                        <!-- Status -->
-                        <div class="mb-4">
+                                @error('role')
+                                    <div class="mt-2 text-danger">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
 
-                            <label class="form-label fw-semibold">
-                                Account Status
-                            </label>
+                            </div>
 
-                            <select name="status" class="form-select">
+                            <!-- Status -->
+                            <div class="mb-4">
 
-                                <option value="active"
-                                    {{ old('status', $result->status) == '1' ? 'selected' : '' }}>
-                                    Active
-                                </option>
+                                <label class="form-label fw-semibold">
+                                    Account Status
+                                </label>
 
-                                <option value="block"
-                                    {{ old('status', $result->status) == '0' ? 'selected' : '' }}>
-                                    Blocked
-                                </option>
+                                <select name="status" class="form-select">
 
-                            </select>
+                                    <option value="1" {{ old('status', $result->status) == 1 ? 'selected' : '' }}>
+                                        Active
+                                    </option>
 
-                            @error('status')
-                                <div class="mt-2 text-danger">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                                    <option value="0" {{ old('status', $result->status) == 0 ? 'selected' : '' }}>
+                                        Blocked
+                                    </option>
 
-                        </div>
+                                </select>
 
-                        <!-- Buttons -->
-                        <div class="gap-3 d-flex">
+                                @error('status')
+                                    <div class="mt-2 text-danger">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
 
-                            <button type="submit"
-                                class="px-5 btn btn-primary rounded-pill">
+                            </div>
 
-                                <i class="fa fa-save me-2"></i>
-                                Save Changes
 
-                            </button>
 
-                            <a href="{{ route('user.show', $result->id) }}"
-                                class="px-5 btn btn-outline-secondary rounded-pill">
+                            <!-- Buttons -->
+                            <div class="gap-3 d-flex">
 
-                                Cancel
+                                <button type="submit" class="px-5 btn btn-primary rounded-pill">
 
-                            </a>
+                                    <i class="fa fa-save me-2"></i>
+                                    Save Changes
 
-                        </div>
+                                </button>
 
-                    </form>
+                                <a href="{{ route('user.show', $result->id) }}"
+                                    class="px-5 btn btn-outline-secondary rounded-pill">
+
+                                    Cancel
+
+                                </a>
+
+                            </div>
+
+                        </form>
+
+                    </div>
 
                 </div>
 
@@ -747,57 +761,53 @@
 
     </div>
 
-</div>
+    <style>
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-<style>
+        .form-card {
+            border: none;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, .06);
+        }
 
-.page-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
+        .form-control,
+        .form-select {
+            border-radius: 15px;
+            padding: 14px;
+            border: 1px solid #e5e7eb;
+        }
 
-.form-card{
-    border:none;
-    border-radius:30px;
-    box-shadow:0 10px 40px rgba(0,0,0,.06);
-}
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 .2rem rgba(79, 70, 229, .15);
+        }
 
-.form-control,
-.form-select{
-    border-radius:15px;
-    padding:14px;
-    border:1px solid #e5e7eb;
-}
+        .profile-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #f3f4f6;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, .1);
+        }
 
-.form-control:focus,
-.form-select:focus{
-    border-color:#4f46e5;
-    box-shadow:0 0 0 .2rem rgba(79,70,229,.15);
-}
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border: none;
+        }
 
-.profile-preview{
-    width:120px;
-    height:120px;
-    border-radius:50%;
-    object-fit:cover;
-    border:5px solid #f3f4f6;
-    box-shadow:0 5px 20px rgba(0,0,0,.1);
-}
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
 
-.btn-primary{
-    background:linear-gradient(135deg,#4f46e5,#7c3aed);
-    border:none;
-}
-
-.btn-primary:hover{
-    transform:translateY(-2px);
-}
-
-.alert{
-    border-radius:15px;
-}
-
-</style>
+        .alert {
+            border-radius: 15px;
+        }
+    </style>
 
 @endsection
