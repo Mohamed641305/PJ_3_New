@@ -435,9 +435,9 @@
                             <i class="fa fa-moon"></i>
                         </button>
 
-                        <form action="{{ route('logout') }}" method="POST">
+                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
-                            <button class="btn btn-danger">
+                            <button type="submit" class="btn btn-danger">
                                 <i class="fa fa-sign-out-alt"></i>
                                 Logout
                             </button>
@@ -677,8 +677,6 @@
             });
 
         });
-
-
     </script>
 
 
