@@ -60,6 +60,196 @@
         .card {
             border-radius: 20px;
         }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .table-wrapper {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .05);
+        }
+
+        .user-avatar {
+            width: 55px;
+            height: 55px;
+            object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .12);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btns .btn {
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .table-shell {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .search-box {
+            margin-bottom: 0;
+            width: 100%;
+        }
+
+        .search-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .search-controls .input-group {
+            flex: 1 1 320px;
+            min-width: 240px;
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.10);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .search-controls .input-group-text {
+            background: #fff;
+            border: none;
+            color: #4f46e5;
+            padding-left: 15px;
+        }
+
+        .search-controls .form-control,
+        .search-controls .form-select {
+            border: none;
+            padding: 12px 14px;
+            box-shadow: none;
+        }
+
+        .search-controls .form-control:focus,
+        .search-controls .form-select:focus {
+            box-shadow: none;
+        }
+
+        .user-card-mobile {
+            display: none;
+        }
+
+        .mobile-card-title {
+            font-size: 1rem;
+        }
+
+        .user-card-mobile .card-body {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-card-mobile .profile-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .user-card-mobile .profile-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            width: 100%;
+        }
+
+        .user-card-mobile .badge-group {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        @media (max-width: 767px) {
+            .page-header {
+                align-items: flex-start;
+            }
+
+            .page-header .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .search-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-controls .input-group {
+                width: 100%;
+                flex: 1 1 100%;
+            }
+
+            .user-card-mobile {
+                display: block;
+            }
+
+            .table thead {
+                display: none;
+            }
+
+            .table,
+            .table tbody,
+            .table tr,
+            .table td {
+                display: block;
+                width: 100%;
+            }
+
+            .table tr {
+                margin-bottom: 15px;
+                border: 1px solid #e9ecef;
+                border-radius: 15px;
+                padding: 15px;
+                background: #fff;
+            }
+
+            body.dark-mode .table tr {
+                background: #2a2d3a;
+                border-color: #444;
+            }
+
+            .table td {
+                border: none;
+                padding: 8px 0;
+            }
+
+            .table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                display: inline-block;
+                min-width: 90px;
+                color: #6c757d;
+            }
+
+            body.dark-mode .table td::before {
+                color: #cbd5e1;
+            }
+        }
     </style>
 
     <div class="container-fluid">
@@ -67,7 +257,7 @@
         <div class="border-0 shadow card rounded-4">
 
             <div class="py-4 bg-white border-0 card-header rounded-top-4">
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="page-header">
 
                     <div>
                         <h3 class="mb-1 fw-bold">
@@ -93,103 +283,159 @@
 
             <div class="card-body">
 
+                <div class="table-shell">
+                    <div class="search-box">
+                        <div class="search-controls">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                <input type="text" id="userSearch" class="form-control"
+                                    placeholder="Search by name, email, phone...">
+                            </div>
 
+                        </div>
+                    </div>
 
-                <div class="table-wrapper">
+                    <div class="table-wrapper">
 
-                    <div class="table-responsive">
+                        <div class="table-responsive d-none d-md-block">
 
-                        <table class="table align-middle table-hover">
+                            <table class="table align-middle table-hover" id="usersTable">
 
-                            <thead class="table-light">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Photo</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
-                                    <th width="180">Actions</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                                @forelse($users as $item)
+                                <thead class="table-light">
                                     <tr>
+                                        <th>#</th>
+                                        <th>Photo</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th width="180">Actions</th>
+                                    </tr>
+                                </thead>
 
-                                        <td>{{ $item->id }}</td>
+                                <tbody>
 
-                                        <td>
+                                    @forelse($users as $item)
+                                        <tr data-name="{{ strtolower($item->name) }}"
+                                            data-email="{{ strtolower($item->email) }}"
+                                            data-phone="{{ $item->phone_number ?? ($item->phone ?? '') }}">
+
+                                            <td data-label="#">{{ $item->id }}</td>
+
+                                            <td data-label="Photo">
+                                                <img src="{{ $item->profile_image ? asset('images/users/' . $item->profile_image) : asset('images/users/default.jpg') }}"
+                                                    class="rounded-circle user-avatar">
+                                            </td>
+
+                                            <td class="fw-semibold" data-label="Name">
+                                                {{ $item->name }}
+                                            </td>
+
+                                            <td data-label="Email">{{ $item->email }}</td>
+
+                                            <td data-label="Role">
+                                                @if ($item->role == 'admin')
+                                                    <span class="badge bg-danger">
+                                                        Admin
+                                                    </span>
+                                                @else
+                                                    <span class="badge bg-info">
+                                                        User
+                                                    </span>
+                                                @endif
+                                            </td>
+
+                                            <td data-label="Status">
+                                                @if ($item->status == '1')
+                                                    <span class="badge bg-success">
+                                                        Active
+                                                    </span>
+                                                @else
+                                                    <span class="badge bg-secondary">
+                                                        Blocked
+                                                    </span>
+                                                @endif
+                                            </td>
+
+                                            <td data-label="Actions">
+                                                <div class="action-btns">
+                                                    <a href="{{ route('user.show', $item->id) }}"
+                                                        class="btn btn-success btn-sm" title="View">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+
+                                                    <a href="{{ route('user.edit', $item->id) }}"
+                                                        class="btn btn-primary btn-sm" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+
+                                                    <a href="{{ route('user.delete', $item->id) }}"
+                                                        class="btn btn-danger btn-sm" title="Delete"
+                                                        onclick="return confirm('Are you sure?')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+
+                                    @empty
+
+                                        <tr>
+                                            <td colspan="7" class="py-4 text-center">
+                                                No users found
+                                            </td>
+                                        </tr>
+                                    @endforelse
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                        <div class="d-block d-md-none" id="usersCards">
+                            @forelse($users as $item)
+                                <div class="mb-3 card user-card-mobile" data-name="{{ strtolower($item->name) }}"
+                                    data-email="{{ strtolower($item->email) }}"
+                                    data-phone="{{ $item->phone_number ?? ($item->phone ?? '') }}">
+                                    <div class="card-body">
+                                        <div class="profile-block">
                                             <img src="{{ $item->profile_image ? asset('images/users/' . $item->profile_image) : asset('images/users/default.jpg') }}"
-                                                width="55" height="55" class="border shadow-sm rounded-circle"
-                                                style="object-fit: cover;">
-                                        </td>
+                                                class="rounded-circle user-avatar">
+                                            <div class="profile-meta">
+                                                <h6 class="mb-1 fw-semibold mobile-card-title">{{ $item->name }}</h6>
+                                                <div class="small text-muted">{{ $item->email }}</div>
+                                                <div class="mt-1 badge-group">
+                                                    @if ($item->role == 'admin')
+                                                        <span class="badge bg-danger">Admin</span>
+                                                    @else
+                                                        <span class="badge bg-info">User</span>
+                                                    @endif
 
-                                        <td class="fw-semibold">
-                                            {{ $item->name }}
-                                        </td>
+                                                    @if ($item->status == '1')
+                                                        <span class="badge bg-success">Active</span>
+                                                    @else
+                                                        <span class="badge bg-secondary">Blocked</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                        <td>{{ $item->email }}</td>
-
-                                        <td>
-                                            @if ($item->role == 'admin')
-                                                <span class="badge bg-danger">
-                                                    Admin
-                                                </span>
-                                            @else
-                                                <span class="badge bg-info">
-                                                    User
-                                                </span>
-                                            @endif
-                                        </td>
-
-                                        <td>
-                                            @if ($item->status == '1')
-                                                <span class="badge bg-success">
-                                                    Active
-                                                </span>
-                                            @else
-                                                <span class="badge bg-secondary">
-                                                    Blocked
-                                                </span>
-                                            @endif
-                                        </td>
-
-                                        <td>
-
-                                            <a href="{{ route('user.show', $item->id) }}"
-                                                class="btn btn-success btn-sm rounded-circle" title="View">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-
-                                            <a href="{{ route('user.edit', $item->id) }}"
-                                                class="btn btn-primary btn-sm rounded-circle" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-
-                                            <a href="{{ route('user.delete', $item->id) }}"
-                                                class="btn btn-danger btn-sm rounded-circle" title="Delete"
-                                                onclick="return confirm('Are you sure?')">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
-
-                                        </td>
-
-                                    </tr>
-
-                                @empty
-
-                                    <tr>
-                                        <td colspan="7" class="py-4 text-center">
-                                            No users found
-                                        </td>
-                                    </tr>
-                                @endforelse
-
-                            </tbody>
-
-                        </table>
+                                        <div class="action-btns">
+                                            <a href="{{ route('user.show', $item->id) }}" class="btn btn-success btn-sm"><i
+                                                    class="fas fa-eye"></i></a>
+                                            <a href="{{ route('user.edit', $item->id) }}" class="btn btn-primary btn-sm"><i
+                                                    class="fas fa-edit"></i></a>
+                                            <a href="{{ route('user.delete', $item->id) }}" class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Are you sure?')"><i class="fas fa-trash"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="py-4 text-center">No users found</div>
+                            @endforelse
+                        </div>
 
                     </div>
 
@@ -199,6 +445,59 @@
 
         </div>
 
-    </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const searchInput = document.getElementById('userSearch');
+                const rows = document.querySelectorAll('#usersTable tbody tr');
+                const cards = document.querySelectorAll('#usersCards .user-card-mobile');
 
-@endsection
+                function normalizeSearchValue(value) {
+                    return String(value || '')
+                        .toLowerCase()
+                        .normalize('NFKD')
+                        .replace(/[\u0300-\u036f]/g, '')
+                        .replace(/[^\p{L}\p{N}]/gu, '');
+                }
+
+                function getSearchText(item) {
+                    const values = [
+                        item.getAttribute('data-name') || '',
+                        item.getAttribute('data-email') || '',
+                        item.getAttribute('data-phone') || ''
+                    ];
+
+                    return values.map(normalizeSearchValue).join(' ');
+                }
+
+                function matchesSearch(item, term) {
+                    if (!term) {
+                        return true;
+                    }
+
+                    const searchText = getSearchText(item);
+                    const tokens = term.split(/\s+/).filter(Boolean);
+
+                    return tokens.every(function(token) {
+                        return searchText.includes(token);
+                    });
+                }
+
+                function applySearch() {
+                    const term = normalizeSearchValue(searchInput ? searchInput.value : '');
+
+                    rows.forEach(function(row) {
+                        row.style.display = matchesSearch(row, term) ? '' : 'none';
+                    });
+
+                    cards.forEach(function(card) {
+                        card.style.display = matchesSearch(card, term) ? '' : 'none';
+                    });
+                }
+
+                if (searchInput) {
+                    searchInput.addEventListener('input', applySearch);
+                }
+            });
+        </script>
+
+    @endsection
