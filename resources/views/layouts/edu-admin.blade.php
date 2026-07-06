@@ -174,6 +174,9 @@
 
             margin-bottom: 15px;
 
+            pointer-events: auto;
+
+
             display: flex;
 
             align-items: center;
@@ -209,6 +212,8 @@
             flex: 1;
 
             padding: 18px 0;
+
+            pointer-events: none;
         }
 
         .toast-title {
@@ -219,7 +224,6 @@
         }
 
         .toast-close {
-
             border: none;
 
             background: none;
@@ -231,6 +235,12 @@
             padding: 15px;
 
             cursor: pointer;
+
+            z-index: 999999;
+
+            position: relative;
+
+            pointer-events: auto;
         }
 
         .toast-close:hover {
@@ -330,6 +340,14 @@
         .error-alert .alert-icon {
             background: #fee2e2;
             color: #dc2626;
+        }
+
+        .field-error {
+            display: block;
+            color: #dc3545;
+            font-size: .875rem;
+            margin-top: .35rem;
+            transition: opacity .35s ease;
         }
 
         .alert-content {
@@ -481,26 +499,34 @@
 
                 @if ($errors->any())
 
-                    @foreach ($errors->all() as $error)
-                        <div class="custom-toast error">
+                    <div class="custom-toast error">
 
-                            <div class="toast-icon">
-                                <i class="fas fa-triangle-exclamation"></i>
+                        <div class="toast-icon">
+                            <i class="fas fa-triangle-exclamation"></i>
+                        </div>
+
+                        <div class="toast-body">
+
+                            <div class="toast-title">
+                                Validation Error
                             </div>
 
-                            <div class="toast-body">
-                                <div class="toast-title">Validation Error</div>
-                                <div>{{ $error }}</div>
-                            </div>
-
-                            <button class="toast-close" onclick="closeToast(this)">
-                                <i class="fas fa-xmark"></i>
-                            </button>
-
-                            <div class="toast-progress"></div>
+                            @if ($errors->count() == 1)
+                                <div>{{ $errors->first() }}</div>
+                            @else
+                                <div>
+                                    We found some issues with your submission. Please correct them and try again. </div>
+                            @endif
 
                         </div>
-                    @endforeach
+
+                        <button class="toast-close" onclick="closeToast(this)">
+                            <i class="fas fa-xmark"></i>
+                        </button>
+
+                        <div class="toast-progress"></div>
+
+                    </div>
 
                 @endif
 
@@ -514,7 +540,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script>
+    {{-- <script>
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('collapsed');
             document.getElementById('content').classList.toggle('expanded');
@@ -526,6 +552,20 @@
     </script>
 
     <script>
+        function hideFieldErrors() {
+            document.querySelectorAll(".field-error").forEach(function(error) {
+
+                error.style.transition = "opacity .35s";
+
+                error.style.opacity = "0";
+
+                setTimeout(() => {
+                    error.remove();
+                }, 350);
+
+            });
+        }
+
         function closeToast(button) {
 
             const toast = button.closest(".custom-toast");
@@ -535,6 +575,8 @@
             setTimeout(() => {
 
                 toast.remove();
+
+                hideFieldErrors();
 
             }, 350);
 
@@ -552,6 +594,8 @@
 
                         toast.remove();
 
+                        hideFieldErrors();
+
                     }, 350);
 
                 }, 4000);
@@ -559,7 +603,84 @@
             });
 
         }
+    </script> --}}
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+            document.getElementById('content').classList.toggle('expanded');
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // إخفاء رسائل الأخطاء أسفل الحقول
+        function hideFieldErrors() {
+
+            const errors = document.querySelectorAll(".field-error");
+
+            if (!errors.length) return;
+
+            errors.forEach(function(error) {
+
+                error.style.transition = "opacity .35s";
+
+                error.style.opacity = "0";
+
+                setTimeout(function() {
+                    error.remove();
+                }, 350);
+
+            });
+
+        }
+
+        // إغلاق الرسالة عند الضغط على X
+        function closeToast(button) {
+
+            const toast = button.closest(".custom-toast");
+
+            if (!toast) return;
+
+            toast.classList.add("hide-toast");
+
+            setTimeout(function() {
+
+                toast.remove();
+
+                hideFieldErrors();
+
+            }, 350);
+
+        }
+
+        // إخفاء الرسالة تلقائياً بعد 4 ثوانٍ
+        window.addEventListener("load", function() {
+
+            document.querySelectorAll(".custom-toast").forEach(function(toast) {
+
+                setTimeout(function() {
+
+                    toast.classList.add("hide-toast");
+
+                    setTimeout(function() {
+
+                        toast.remove();
+
+                        hideFieldErrors();
+
+                    }, 350);
+
+                }, 4000);
+
+            });
+
+        });
+
+
     </script>
+
 
 </body>
 

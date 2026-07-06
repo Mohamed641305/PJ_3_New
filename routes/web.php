@@ -33,7 +33,7 @@ Route::get('/dashboard', [AdminController::class, 'dashboard'])
 */
 
 Route::get('/home', [HomeController::class, 'index'])
-    ->middleware(['auth', 'isAdmin'])
+    ->middleware(['auth'])
     ->name('home');
 
 /*

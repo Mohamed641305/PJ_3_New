@@ -265,7 +265,7 @@
 </style>
 
 @endsection --}}
-{{-- 
+{{--
 @extends('layouts.edu-admin')
 
 @section('title', 'Edit User')
@@ -580,10 +580,10 @@
                             <div class="mb-4 text-center">
 
                                 @if ($result->profile_image)
-                                    <img src="{{ asset('images/users/' . $result->profile_image) }}"
+                                    <img id="profilePreview" src="{{ asset('images/users/' . $result->profile_image) }}"
                                         class="mb-3 profile-preview">
                                 @else
-                                    <img src="{{ asset('images/users/default.jpg') }}" class="mb-3 profile-preview">
+                                    <img id="profilePreview" src="{{ asset('images/users/default.jpg') }}" class="mb-3 profile-preview">
                                 @endif
 
                                 <div>
@@ -591,14 +591,27 @@
                                         Change Profile Image
                                     </label>
 
-                                    <input type="file" name="profile_image" class="form-control">
+                                    <input type="hidden" name="remove_image" id="remove_image" value="0">
 
+                                    <div class="gap-2 d-flex align-items-center">
+                                        <input type="file" name="profile_image" id="profile_image" class="form-control">
+                                        @if ($result->profile_image != 'default.jpg')
+                                            <button type="button" class="btn btn-outline-danger" id="removeImageBtn"
+                                                title="Use Default Image">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        @endif
+                                    </div>
                                     @error('profile_image')
-                                        <div class="mt-2 alert alert-danger">
+                                        <div class="invalid-feedback d-block field-error">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
+
+
+
+
 
                             </div>
 
@@ -610,14 +623,12 @@
                                 </label>
 
                                 <input type="text" name="name" class="form-control"
-                                    value="{{ old('name', $result->name) }}">
-
+                                    value="{{ old('name') != '' ? old('name') : $result->name }}">
                                 @error('name')
-                                    <div class="mt-2 text-danger">
+                                    <div class="invalid-feedback d-block field-error">
                                         {{ $message }}
                                     </div>
                                 @enderror
-
                             </div>
 
                             <!-- Email -->
@@ -628,10 +639,10 @@
                                 </label>
 
                                 <input type="email" name="email" class="form-control"
-                                    value="{{ old('email', $result->email) }}">
+                                    value="{{ old('email') != '' ? old('email') : $result->email }}">
 
                                 @error('email')
-                                    <div class="mt-2 text-danger">
+                                    <div class="invalid-feedback d-block field-error">
                                         {{ $message }}
                                     </div>
                                 @enderror
@@ -646,10 +657,9 @@
                                 </label>
 
                                 <input type="text" name="phone_number" class="form-control"
-                                    value="{{ old('phone_number', $result->phone_number) }}">
-
+                                    value="{{ old('phone_number') != '' ? old('phone_number') : $result->phone_number }}">
                                 @error('phone_number')
-                                    <div class="mt-2 text-danger">
+                                    <div class="invalid-feedback d-block field-error">
                                         {{ $message }}
                                     </div>
                                 @enderror
@@ -664,10 +674,10 @@
                                 </label>
 
                                 <input type="text" name="address" class="form-control"
-                                    value="{{ old('address', $result->address) }}">
+                                    value="{{ old('address') != '' ? old('address') : $result->address }}">
 
                                 @error('address')
-                                    <div class="mt-2 text-danger">
+                                    <div class="invalid-feedback d-block field-error">
                                         {{ $message }}
                                     </div>
                                 @enderror
@@ -683,18 +693,20 @@
 
                                 <select name="role" class="form-select">
 
-                                    <option value="user" {{ old('role', $result->role) == 'user' ? 'selected' : '' }}>
+                                    <option value="user"
+                                        {{ old('role') != '' ? (old('role') == 'user' ? 'selected' : '') : ($result->role == 'user' ? 'selected' : '') }}>
                                         User
                                     </option>
 
-                                    <option value="admin" {{ old('role', $result->role) == 'admin' ? 'selected' : '' }}>
+                                    <option value="admin"
+                                        {{ old('role') != '' ? (old('role') == 'admin' ? 'selected' : '') : ($result->role == 'admin' ? 'selected' : '') }}>
                                         Admin
                                     </option>
 
                                 </select>
 
                                 @error('role')
-                                    <div class="mt-2 text-danger">
+                                    <div class="invalid-feedback d-block field-error">
                                         {{ $message }}
                                     </div>
                                 @enderror
@@ -710,7 +722,8 @@
 
                                 <select name="status" class="form-select">
 
-                                    <option value="1" {{ old('status', $result->status) == 1 ? 'selected' : '' }}>
+                                    <option value="1"
+                                        {{ old('status') != '' ? (old('status') == 1 ? 'selected' : '') : ($result->status == 1 ? 'selected' : '') }}>
                                         Active
                                     </option>
 
@@ -721,11 +734,10 @@
                                 </select>
 
                                 @error('status')
-                                    <div class="mt-2 text-danger">
+                                    <div class="invalid-feedback d-block field-error">
                                         {{ $message }}
                                     </div>
                                 @enderror
-
                             </div>
 
 
@@ -808,6 +820,29 @@
         .alert {
             border-radius: 15px;
         }
+
+        .field-error {
+            display: block;
+            color: #dc3545;
+            font-size: .875rem;
+            margin-top: .35rem;
+            transition: opacity .35s ease;
+        }
     </style>
+
+    <script>
+        document.getElementById('removeImageBtn')?.addEventListener('click', function() {
+
+            document.getElementById('remove_image').value = 1;
+
+            document.getElementById('profilePreview').src =
+                "{{ asset('images/users/default.jpg') }}";
+
+            document.getElementById('profile_image').value = "";
+
+            this.disabled = true;
+            this.innerHTML = '<i class="fa fa-check"></i>';
+        });
+    </script>
 
 @endsection

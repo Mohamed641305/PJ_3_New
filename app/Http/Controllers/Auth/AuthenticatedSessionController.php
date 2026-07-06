@@ -33,7 +33,7 @@ class AuthenticatedSessionController extends Controller {
         }
 
         // لو User عادي
-        return redirect()->route( 'welcome' ) ->with('success', 'Welcome, ' . Auth::user()->name . '!');
+        return redirect()->route( 'welcome' )->with('success', 'Welcome, ' . Auth::user()->name . '!');
     }
 
     /**

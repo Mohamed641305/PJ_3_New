@@ -86,7 +86,21 @@ class UserController extends Controller {
 
         $user = User::findOrFail( $id );
 
-        if ( $request->hasFile( 'profile_image' ) ) {
+        // إذا اختار استخدام الصورة الافتراضية
+        if ( $request->filled( 'remove_image' ) && $request->input( 'remove_image' ) == '1' ) {
+
+            if (
+                $user->profile_image != 'default.jpg' &&
+                File::exists( public_path( 'images/users/' . $user->profile_image ) )
+            ) {
+                File::delete( public_path( 'images/users/' . $user->profile_image ) );
+            }
+
+            $imgName = 'default.jpg';
+
+        }
+        // إذا رفع صورة جديدة
+        elseif ( $request->hasFile( 'profile_image' ) ) {
 
             if (
                 $user->profile_image != 'default.jpg' &&
@@ -99,7 +113,10 @@ class UserController extends Controller {
             $imgName = rand( 1000, 9999 ) . '_' . time() . '.' . $img->extension();
             $img->move( public_path( 'images/users' ), $imgName );
 
-        } else {
+        }
+        // إذا لم يغير الصورة
+        else {
+
             $imgName = $user->profile_image;
         }
 
@@ -113,7 +130,7 @@ class UserController extends Controller {
             'phone_number' => $request->phone_number,
             'address' => $request->address,
             'role' => $request->role,
-            'status' => $request->input( 'status', $user->status ),
+            'status' => $request->status,
         ] );
 
         return redirect()

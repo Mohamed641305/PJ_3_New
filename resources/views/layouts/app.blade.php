@@ -43,13 +43,21 @@
             right: 25px;
             min-width: 360px;
             max-width: 420px;
+
+            /* overflow: hidden; */
+            /* مهم جداً */
+
             background: #fff;
             border-radius: 15px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, .15);
+
             display: flex;
             align-items: center;
+
             padding: 18px;
+
             z-index: 9999;
+
             animation: slideIn .4s ease;
         }
 
@@ -105,6 +113,41 @@
 
         .hide-alert {
             animation: slideOut .35s forwards;
+        }
+
+        .toast-progress {
+
+            position: absolute;
+
+            bottom: 0;
+
+            left: 0;
+
+            height: 4px;
+
+            width: 100%;
+
+            background: #2563eb;
+
+            animation: progress 4s linear forwards;
+        }
+
+        @keyframes progress {
+            from {
+                width: 100%;
+            }
+
+            to {
+                width: 0%;
+            }
+        }
+
+        .success-alert .toast-progress {
+            background: #22c55e;
+        }
+
+        .error-alert .toast-progress {
+            background: #ef4444;
         }
 
         @keyframes slideIn {
@@ -202,6 +245,9 @@
                         <button class="alert-close" onclick="closeAlert(this)">
                             <i class="fas fa-xmark"></i>
                         </button>
+
+                        <div class="toast-progress"></div>
+
                     </div>
                 @endif
 
@@ -219,6 +265,9 @@
                         <button class="alert-close" onclick="closeAlert(this)">
                             <i class="fas fa-xmark"></i>
                         </button>
+
+                        <div class="toast-progress"></div>
+
                     </div>
                 @endif
 
@@ -240,6 +289,8 @@
                         <button class="alert-close" onclick="closeAlert(this)">
                             <i class="fas fa-xmark"></i>
                         </button>
+
+                        <div class="toast-progress"></div>
 
                     </div>
                 @endif
@@ -292,7 +343,7 @@
         }, 4000);
     });
 </script> --}}
-    <script>
+    {{-- <script>
         function closeAlert(button) {
             const alert = button.closest(".custom-alert");
 
@@ -320,8 +371,35 @@
 
             });
         });
-    </script>
+    </script> --}}
+    <script>
+        function closeAlert(button) {
+            const alert = button.closest(".custom-alert");
 
+            if (!alert) return;
+
+            alert.classList.add("hide-alert");
+
+            setTimeout(() => {
+                alert.remove();
+            }, 350);
+        }
+
+        window.addEventListener("load", () => {
+            document.querySelectorAll(".custom-alert").forEach(alert => {
+
+                setTimeout(() => {
+                    alert.classList.add("hide-alert");
+
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 350);
+
+                }, 4000);
+
+            });
+        });
+    </script>
     </body>
 
 </html>
