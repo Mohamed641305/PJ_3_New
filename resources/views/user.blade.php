@@ -59,14 +59,49 @@
 
         .card {
             border-radius: 20px;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        .container-fluid {
+            padding: 1.5rem 1rem 2rem;
+        }
+
+        .table-shell {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin: 0 auto;
+            max-width: 100%;
         }
 
         .page-header {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 1fr auto;
             align-items: center;
             gap: 15px;
-            flex-wrap: wrap;
+        }
+
+        .page-header .header-title {
+            justify-self: center;
+            text-align: center;
+            min-width: 0;
+        }
+
+        .page-header .header-title h3 {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .page-header .header-title .text-muted {
+            display: block;
+        }
+
+        .page-header .btn {
+            flex: 0 0 auto;
         }
 
         .table-wrapper {
@@ -206,6 +241,9 @@
 
             .user-card-mobile {
                 display: block;
+                margin-left: auto;
+                margin-right: auto;
+                max-width: 500px;
             }
 
             .table thead {
@@ -275,7 +313,7 @@
 
                     <a href="{{ route('user.create') }}" class="px-4 btn btn-primary rounded-pill">
                         <i class="fa-solid fa-user-plus me-1"></i>
-                        Add User
+                        <span class="d-none d-sm-inline">Add User</span>
                     </a>
 
                 </div>
