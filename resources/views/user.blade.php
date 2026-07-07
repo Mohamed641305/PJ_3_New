@@ -182,6 +182,12 @@
 
         .user-card-mobile {
             display: none;
+            max-width: 520px;
+            margin: 0 auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(16, 24, 40, 0.06);
+            overflow: hidden;
+            background: #fff;
         }
 
         .mobile-card-title {
@@ -243,9 +249,27 @@
 
             .user-card-mobile {
                 display: block;
-                margin-left: auto;
-                margin-right: auto;
-                max-width: 500px;
+                margin: 0 auto;
+                max-width: 520px;
+                padding: 0;
+                border-radius: 12px;
+                box-shadow: 0 8px 20px rgba(16, 24, 40, 0.06);
+                background: #fff;
+            }
+
+            .user-card-mobile .card-body {
+                padding: 14px 16px;
+            }
+
+            .page-header {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .page-header .btn {
+                justify-self: center;
             }
 
             .table thead {
