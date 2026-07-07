@@ -400,7 +400,7 @@
             <div class="sidebar" id="sidebar">
 
                 <div class="logo">
-                    <i class="fa-solid fa-th-large"></i>
+                    <i class="fa-solid fa-layer-group"></i>
                     <span class="logo-text">AdminPanel</span>
                 </div>
 
