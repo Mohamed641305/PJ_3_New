@@ -400,8 +400,8 @@
             <div class="sidebar" id="sidebar">
 
                 <div class="logo">
-                    <i class="fa-solid fa-globe"></i>
-                    <span class="logo-text">OmniPanel</span>
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span class="logo-text">AdminPanel</span>
                 </div>
 
                 <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
