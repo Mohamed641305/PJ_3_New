@@ -44,9 +44,13 @@
 
         /* Table Border Radius */
         .table-wrapper {
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
-            border: 1px solid #e9ecef;
+            border: none;
+            background: #ffffff;
+            padding: 12px;
+            margin-top: 8px;
+            box-shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
         }
 
         body.dark-mode .table-wrapper {
@@ -64,7 +68,7 @@
         }
 
         .container-fluid {
-            padding: 1.5rem 1rem 2rem;
+            padding: 1rem 1rem 1.5rem;
         }
 
         .table-shell {
@@ -104,9 +108,7 @@
             flex: 0 0 auto;
         }
 
-        .table-wrapper {
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .05);
-        }
+        /* keep subtle lift for table wrapper (already applied above) */
 
         .user-avatar {
             width: 55px;
