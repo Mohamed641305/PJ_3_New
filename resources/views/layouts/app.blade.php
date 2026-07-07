@@ -7,7 +7,7 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'EduPanel') }}</title>
+    <title>{{ config('app.name', 'OmniPanel') }}</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -180,7 +180,7 @@
 
                     <a class="navbar-brand" href="{{ url('/') }}">
                         <i class="fas fa-graduation-cap me-2"></i>
-                        EduPanel
+                        OmniPanel
                     </a>
 
                     <div class="ms-auto">

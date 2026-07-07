@@ -66,11 +66,11 @@
                     <div class="col-md-6">
 
                         <h1 class="hero-title">
-                            EduPanel
+                            OmniPanel
                         </h1>
 
                         <p class="my-4 hero-text">
-                            Welcome to EduPanel System.
+                            Welcome to OmniPanel System.
                             Manage users and your educational platform easily and efficiently.
                         </p>
 
