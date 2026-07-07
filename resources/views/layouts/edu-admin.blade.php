@@ -400,7 +400,7 @@
             <div class="sidebar" id="sidebar">
 
                 <div class="logo">
-                    <i class="fa-solid fa-graduation-cap"></i>
+                    <i class="fa-solid fa-th-large"></i>
                     <span class="logo-text">AdminPanel</span>
                 </div>
 
